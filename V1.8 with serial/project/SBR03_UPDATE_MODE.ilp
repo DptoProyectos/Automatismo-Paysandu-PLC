@@ -1,0 +1,52 @@
+(*2*)
+(* Network 0 *)
+(*DETECCIÓN DE CAMBIO DE MODO*)
+LD    TRUE
+NE    HMI_M, MODE_LastMode
+S    %M100.7
+R    rstCount
+(* Network 1 *)
+(*DETECCIÓN DE CAMBIO DE MODO*)
+LD    TRUE
+MOVE    HMI_M, MODE_LastMode
+(* Network 2 *)
+(*HUBO CAMBIO EN EL MODO POR EL HMIESCRIBO EL CAMBIO EN UPDATE_MODE CON FORMATO PARA ACTUALIZAR EN LA WEB Y ESPERO UN TIEMPO PARA QUE EL SERVER NO PONGA MODE_UPDATE EN UNO SIN HABER ACTUALIZADO EL MODO EN LA WEB*)
+LD    %M100.7
+B_TO_I    HMI_M, int0
+MOVE    int0, M_ModeUpdate
+ADD    1, M_ModeUpdate
+AND    rstCount
+TON   T30, 200
+__CR_EQ_1
+MOVE    T30, int7
+__CR_RESTORE
+R    %M100.7
+(* Network 3 *)
+(*reinicio el timer ante un nuevo cambio en el HMI*)
+LD    %M100.7
+S    rstCount
+(* Network 4 *)
+(*NO HUBO CAMBIO EN EL MODO POR EL HMICHEQUEO SI HAY VALORES PENDIENTES A ACRTUALIZAR EN UPDATE_MODECHEQUEO SI EL VALOR PENDIENTE FUE SETADO POR LA WEB PARA EL PLCACTUALIZO EL MODO DE TRABAJO*)
+LDN    %M100.7
+NE    M_ModeUpdate, 0
+GE    M_ModeUpdate, 5
+LE    M_ModeUpdate, 7
+AND(
+LD    TRUE
+MOVE    M_ModeUpdate, int0
+SUB    5, int0
+I_TO_B    int0, byte0
+MOVE    byte0, HMI_M
+OR(
+LD    TRUE
+MOVE    0, M_ModeUpdate
+)
+OR(
+LD    TRUE
+MOVE    HMI_M, MODE_LastMode
+)
+)
+(* Network 5 *)
+(*ACTUALIZAMOS LA VARIABLE DE TRABAJO DEL SOFTWARE*)
+LD    TRUE
+MOVE    HMI_M, SOF_M

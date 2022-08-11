@@ -1,0 +1,45 @@
+(*2*)
+(* Network 0 *)
+(*MODO LOCALDetecto los pulsos*)
+LDN    DES
+AND(
+LD    INC_F
+R_TRIG
+INC    RHF_Count
+MOVE    RHF_Count, C_CNT
+OR(
+LD    DEC_F
+F_TRIG
+DEC    RHF_Count
+MOVE    RHF_Count, C_CNT
+)
+)
+(* Network 1 *)
+(*pasado un tiempo de 3 segundos no cuento mas los pulsos de entrada*)
+LD    TRUE
+AND(
+LD    INC_F
+OR    DEC_F
+)
+TOF   T4, 300
+__CR_EQ_1
+MOVE    T4, int0
+__CR_RESTORE
+F_TRIG
+MOVE    RHF_Count, COUNT
+S    DES
+S    READED
+(* Network 2 *)
+LD    DES
+F_TRIG
+MOVE    0, RHF_Count
+AND(
+LD    TRUE
+MOVE    0, COUNT
+OR(
+LD    TRUE
+MOVE    0, C_CNT
+)
+)
+R    DES
+R    READED

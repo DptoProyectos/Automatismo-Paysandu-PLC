@@ -1,0 +1,33 @@
+(*2*)
+(* Network 0 *)
+(*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------DETECTOR DE PULSOS DE FRECUENCIAValor de aumento o decremeto de la fracuencia*)
+LD    TRUE
+MOVE    RHF_CurrCount, %VW74
+(* Network 1 *)
+(*Valor que indica cuando se esta escribiendo el cambio de frecuencia en las salidas (1 => Writing frequency)*)
+LD    %M100.5
+ST   %M80.2
+(* Network 2 *)
+(*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SOFTWAREEstado de operación 0-> Emerencia 1-> Local 2-> Remoto*)
+LD    TRUE
+MOVE    MODE_HmiMode, %VB76
+(* Network 3 *)
+(*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SALIDAS PARA EL CANAL ANALÓGICO 0valor del sensor de presión*)
+LD    TRUE
+MOVE    PRESION, %VR90
+(* Network 4 *)
+(*SALIDAS PARA EL CANAL ANALÓGICO 0Bit que indica alarma en el canal analógico 0 (0=>OK, 1=>ALARMA)*)
+LD    %M101.2
+ST   %M80.6
+(* Network 5 *)
+(*SALIDAS PARA EL CANAL ANALÓGICO 0Bit que indica que la alarma en el canal analógico 0 en por overload (0=>OK, 1=>ALARMA)*)
+LD    %M101.3
+ST   %M80.7
+(* Network 6 *)
+(*SALIDAS PARA EL CANAL ANALÓGICO 0Bit que indica que la alarma en el canal analógico 0 en por underload (0=>OK, 1=>ALARMA)*)
+LD    %M101.4
+ST   %M90.0
+(* Network 7 *)
+(*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SALIDA DE LA SALIDA DIGITAL CEROCaudal de sellos en m3/h*)
+LD    TRUE
+MOVE    CAUDAL_SELLOS, %VR102

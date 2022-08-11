@@ -1,0 +1,66 @@
+(*2*)
+(* Network 0 *)
+(*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------CANALES ANALÓGICOSLECTURA DEL VALOR DE PRESION*)
+LD    TRUE
+CAL    SBR08    AI0_Alr, AI0_AlrHig, AI0_AlrLow
+(* Network 1 *)
+(*LECTURA DEL LA ALTURA DEL AGUA DE LA CAMARA*)
+LD    TRUE
+CAL    SBR14    AI1_Alr, AI1_AlrLow, AI1_AlrHig
+(* Network 2 *)
+(*LECTURA DE LA FRECUENCIA DE TRABAJO DE LA BOMBA*)
+LD    TRUE
+CAL    SBR15    AI2_Alr, AI2_AlrLow, AI2_AlrHig
+(* Network 3 *)
+(*LECTURA DE LA CORRIENTE DE CONSUMO DE LA BOMBA*)
+LD    TRUE
+CAL    SBR16    AI3_Alr, AI3_AlrLow, AI3_AlrHig
+(* Network 4 *)
+(*LECTURA DE LA TEMPERATURA DEL VARIADOR*)
+LD    TRUE
+CAL    SBR17    AI4_Alr, AI4_AlrLow, AI4_AlrHig
+(* Network 5 *)
+(*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ENTRADAS DIGITALESSEÑAL DE CAUDALLectura de conteo de pulsos de la entrada digital 0*)
+LD    TRUE
+CAL    SBR10    %I0.0, DI0_Pton, DI0_Ptoff, DI0_Rst, DI0_Count, DI0_TimePulse
+(* Network 6 *)
+(*ENTRADAS DIGITALESSEÑAL DE CAUDALCalculo del caudal en l/min: (6 000 000 * magpp)/tp(ms)Qmax = 60 000 000 * mapp L/minQmin = 1831 * mapp   [L/min]*)
+LD    TRUE
+MOVE    PC_Magpp, real0
+MUL    60000000.0, real0
+DI_TO_R    DI0_TimePulse, real1
+AND(
+LD    TRUE
+MOVE    real0, CAUDAL_SELLOS
+DIV    real1, CAUDAL_SELLOS
+OR(
+LD    TRUE
+GE    real1, 327670.0
+MOVE    0.0, CAUDAL_SELLOS
+)
+)
+(* Network 7 *)
+(*ENTRADAS DIGITALESSEÑAL DE FLUJOLectura de conteo de pulsos de la entrada digital 1*)
+LD    TRUE
+CAL    SBR12    %I0.1, DI1_Pton, DI1_Ptoff, DI1_Rst, DI1_Count, DI1_TimePulse
+(* Network 8 *)
+(*ENTRADAS DIGITALESSEÑAL DE FLUJODecimos que hay flijo cuando la distancia temporal entre los pulsos es menor de 1 segundos*)
+LD    TRUE
+LT    DI1_TimePulse, DI#1000
+ST   %M101.7
+(* Network 9 *)
+(*ENTRADAS DIGITALESEstado de la bomba*)
+LD    %I0.2
+ST   %M102.6
+(* Network 10 *)
+(*ENTRADAS DIGITALESAlarma de falla del variador*)
+LD    %I0.3
+ST   %M104.0
+(* Network 11 *)
+(*ENTRADAS DIGITALESEstado del variador*)
+LD    %I0.4
+ST   %M104.1
+(* Network 12 *)
+(*ENTRADAS DIGITALESEstado de la entrada de línea de tensión*)
+LD    %I0.5
+ST   %M104.2

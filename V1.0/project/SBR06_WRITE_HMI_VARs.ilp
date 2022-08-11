@@ -1,0 +1,13 @@
+(*2*)
+(* Network 0 *)
+(*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------DETECTOR DE PULSOS DE FRECUENCIAValor de aumento o decremeto de la fracuencia*)
+LD    TRUE
+MOVE    RHF_CurrCount, %VW74
+(* Network 1 *)
+(*Valor que indica cuando se esta escribiendo el cambio de frecuencia en las salidas (1 => Writing frequency)*)
+LD    %M100.5
+ST   %M80.2
+(* Network 2 *)
+(*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SOFTWAREEstado de operación 0-> Emerencia 1-> Local 2-> Remoto*)
+LD    TRUE
+MOVE    MODE_HmiMode, %VB76

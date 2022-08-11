@@ -1,0 +1,20 @@
+VAR_INPUT
+    MMAX  AT  %LD190 : REAL ; (* valor máximo de la magnitud leída por el sensor *) 
+    MMIN  AT  %LD194 : REAL ; (* valor mínimos de la magnitud leida por el sensor *) 
+    IMAX  AT  %LW198 : INT ; (* rango máximo de la señal de salida del sensor a conectar (0-20) *) 
+    IMIN  AT  %LW200 : INT ; (* rango mínimo de la señal de salida del sensor a conectar (0-20) *) 
+END_VAR
+VAR_OUTPUT
+    ALAR  AT  %L4.1 : BOOL ; (* alarma {0=>sensor OK | 1=> sensor FAIL}: Se activa cuando pasan 5 segundos con los valores por debajo de MMIN o arriba de MMAX *) 
+    LOW  AT  %L4.2 : BOOL ; (* estado de alarma {1=> sensor underflow }: Indica que se activo la alarma porque la medicion no alcanza MMIN *) 
+    AO  AT  %LD202 : REAL ; (* VALOR DE LA MAGNITUD LEIDA POR EL SENSOR CONECTADO AL CANAL ANALÓGICO DE ENTRADA *) 
+    HIG  AT  %L4.3 : BOOL ; (* estado de alarma {1=> sensor overflow }: Indica que se activo la alarma porque la medicion del senso superó MMAX *) 
+END_VAR
+VAR
+    imaxxmil  AT  %LW206 : INT ; (* valor de IMAX multiplicado por mil *) 
+    trash_DI  AT  %LD208 : DINT ; (* variable basura DI para el LINCO *) 
+    iminxmil  AT  %LW212 : INT ; (* valor de IMIN multiplicado por mil *) 
+    alrmLow  AT  %L6.0 : BOOL ; (*  *) 
+    alrmHig  AT  %L6.1 : BOOL ; (*  *) 
+    alr  AT  %L6.2 : BOOL ; (*  *) 
+END_VAR

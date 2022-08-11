@@ -1,0 +1,12 @@
+(*2*)
+(* Network 0 *)
+LD    %SM0.1
+ANDN    SofOut
+R    HmiIn
+(* Network 1 *)
+LD    %SM0.1
+AND    SofOut
+S    HmiIn
+(* Network 2 *)
+LD    HmiIn
+ST   SofOut

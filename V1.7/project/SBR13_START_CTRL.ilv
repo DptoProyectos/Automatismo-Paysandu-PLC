@@ -1,0 +1,15 @@
+VAR_INPUT
+    start  AT  %L2.4 : BOOL ; (* Señal de arranque para la bomba *) 
+    pMin  AT  %LD136 : REAL ; (* Presión mínima necesaria para el arranque de la bomba (bar) *) 
+    cauMin  AT  %LD140 : REAL ; (* Caudal mínimo necesario para el arranque de la bomba (L/min) *) 
+END_VAR
+VAR_OUTPUT
+    pump  AT  %L2.7 : BOOL ; (* Señal que le da el prendido a la bomba (0 -> apagar | 1 -> prender) *) 
+    valve  AT  %L3.3 : BOOL ; (* Señal que le da el prendido a la electroválvula *) 
+    alrPres  AT  %L3.0 : BOOL ; (* Alarma por poca presion *) 
+    alrCau  AT  %L2.6 : BOOL ; (* Alarma por caudal bajo *) 
+    alrFlow  AT  %L3.1 : BOOL ; (* Alarma por falta de flujo *) 
+END_VAR
+VAR
+    w5seg  AT  %L2.5 : BOOL ; (*  *) 
+END_VAR

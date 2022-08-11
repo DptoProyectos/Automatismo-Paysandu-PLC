@@ -1,0 +1,60 @@
+(*2*)
+(* Network 0 *)
+(*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------PROCESO DE ARRANQUE DE LA BOMBACuando se manda a prender la bomba abro la electroválvula y espero 10 segundos*)
+LD    start
+S    valve
+(* Network 1 *)
+(*PROCESESO DE ARRANQUE DE LA BOMBATiempo de espera de 5 segundos*)
+LD    valve
+TON   T5, 1000
+__CR_EQ_1
+MOVE    T5, int0
+__CR_RESTORE
+ST   w5seg
+(* Network 2 *)
+(*PROCESESO DE ARRANQUE DE LA BOMBASi no hay flujo activo la alarma de flujo*)
+LD    w5seg
+ANDN    %M101.7
+ST   alrFlow
+(* Network 3 *)
+(*PROCESESO DE ARRANQUE DE LA BOMBASi la presión y el caudal están dentro de los parámetros prendo la bomba pasado unos 10 segundos*)
+LD    w5seg
+GE    PRESION, pMin
+GE    CAUDAL_SELLOS, cauMin
+TON   T23, 100
+__CR_EQ_1
+MOVE    T23, int0
+__CR_RESTORE
+S    pump
+(* Network 4 *)
+(*PROCESESO DE ARRANQUE DE LA BOMBASi la presión es menor  que la necesaria activo alarma de presión y apago la bomba*)
+LD    w5seg
+LT    PRESION, pMin
+TON   T24, 50
+__CR_EQ_1
+MOVE    T24, int0
+__CR_RESTORE
+ST   alrPres
+R    pump
+(* Network 5 *)
+(*PROCESESO DE ARRANQUE DE LA BOMBASi el caudal es menor  que la necesaria activo alarma de caudal y apago la bomba*)
+LD    w5seg
+LT    CAUDAL_SELLOS, cauMin
+TON   T25, 50
+__CR_EQ_1
+MOVE    T25, int0
+__CR_RESTORE
+ST   alrCau
+R    pump
+(* Network 6 *)
+(*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------PROCESESO DE PARADA DE LA BOMBAApago la bomba*)
+LDN    start
+R    pump
+(* Network 7 *)
+(*PROCESESO DE PARADA DE LA BOMBACuando se manda a apagar la bomba espero 10 segundos antes de cerrar la electroválvula*)
+LDN    start
+TON   T6, 1000
+__CR_EQ_1
+MOVE    T6, int0
+__CR_RESTORE
+R    valve

@@ -1,0 +1,4 @@
+VAR
+    pulseUp  AT  %L8.1 : BOOL ; (*  *) 
+    pulseDwn  AT  %L8.2 : BOOL ; (*  *) 
+END_VAR

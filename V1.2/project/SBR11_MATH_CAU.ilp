@@ -1,0 +1,19 @@
+(*2*)
+(* Network 0 *)
+(*METODO DIRECTOCALCULO DE CAUDAL CUANDO ES METODO DIRECTO (EL CAUDAL SE TOMA DE FORMA DIRECTA DEL CANAL DE PULSOS*)
+LD    TRUE
+AND(
+LD    TRUE
+I_TO_DI    PULSES, dint0
+DI_TO_R    dint0, real0
+MUL    MAGPP, real0
+OR(
+LD    TRUE
+I_TO_DI    T_POLL, dint1
+DI_TO_R    dint1, real1
+)
+)
+MOVE    real0, real2
+MUL    3600.00, real2
+MOVE    real2, Qm3H
+DIV    real1, Qm3H

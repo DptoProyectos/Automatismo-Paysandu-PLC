@@ -1,0 +1,12 @@
+VAR_INPUT
+    INC_F  AT  %L0.4 : BOOL ; (* Pulsos para incrementar la frecuencia *) 
+    DEC_F  AT  %L0.7 : BOOL ; (* Pulsos para decrementar la frecuencia *) 
+END_VAR
+VAR_IN_OUT
+    DES  AT  %L0.5 : BOOL ; (* Señal que se activa pasado 3 segundos e impide seguir contando *) 
+END_VAR
+VAR_OUTPUT
+    COUNT  AT  %LW40 : INT ; (* Cantidad de pulsos contados con un período máximo de 3 segundos *) 
+    C_CNT  AT  %LW42 : INT ; (* Cantidad de pulsos contados hasta el momento *) 
+    READED  AT  %L1.0 : BOOL ; (* Variable que indica que se leyeron los pulsos y que se espera un DES para leer denuevo *) 
+END_VAR

@@ -1,0 +1,16 @@
+(*2*)
+(* Network 0 *)
+LD    TRUE
+CAL    SBR00
+(* Network 1 *)
+LD    TRUE
+CAL    SBR03    MODE_HmiMode, MODE
+(* Network 2 *)
+LD    TRUE
+CAL    SBR02
+(* Network 3 *)
+LD    TRUE
+CAL    SBR06
+(* Network 4 *)
+LD    TRUE
+CAL    SBR01

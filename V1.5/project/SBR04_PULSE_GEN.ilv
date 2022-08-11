@@ -1,0 +1,16 @@
+VAR_INPUT
+    T_ON  AT  %LW36 : INT ; (* valor en ms del ancho del pulso (tiene que ser multiplo de 100mS) *) 
+    T_OFF  AT  %LW38 : INT ; (* valor en ms del tiempo en off del pulso (tiene que ser multiplo de 100mS) *) 
+END_VAR
+VAR_IN_OUT
+    PUL_GEN  AT  %LW44 : INT ; (* Cantidad de pulsos a generar *) 
+END_VAR
+VAR_OUTPUT
+    P_UP  AT  %L0.3 : BOOL ; (* Pulsos generados en la salida para aumentar la frecuencia *) 
+    P_DOWN  AT  %L1.3 : BOOL ; (* Pulsos generados en la salida para disminuir la frecuencia *) 
+    READY  AT  %L0.6 : BOOL ; (*  *) 
+END_VAR
+VAR
+    PUL_CNT  AT  %LB35 : BYTE ; (*  *) 
+    PULSES  AT  %L1.4 : BOOL ; (*  *) 
+END_VAR

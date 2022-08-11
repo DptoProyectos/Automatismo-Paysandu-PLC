@@ -1,0 +1,8 @@
+VAR_INPUT
+    PULSES  AT  %LW78 : INT ; (*  *) 
+    MAGPP  AT  %LD80 : REAL ; (*  *) 
+    T_POLL  AT  %LW84 : INT ; (*  *) 
+END_VAR
+VAR_OUTPUT
+    Qm3H  AT  %LD86 : REAL ; (*  *) 
+END_VAR

@@ -1,0 +1,73 @@
+(*2*)
+(* Network 0 *)
+(*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SOFTWAREAccion de prender y apagar la bomba (0-> APAGAR | 1-> PRENDER)*)
+LD    TRUE
+CAL    SBR07    %M80.3, PUMP_OnOff
+(* Network 1 *)
+(*SOFTWAREEstado de operación 0-> Emerencia 1-> Local 2-> Remoto*)
+LD    %SM0.1
+MOVE    MODE_HmiMode, %VB76
+(* Network 2 *)
+LD    TRUE
+MOVE    %VB76, MODE_HmiMode
+(* Network 3 *)
+(*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------DETECTOR DE PULSOS DE FRECUENCIAPulsos para disminuir la frecuencia de la bomba*)
+LD    %M80.4
+ST   %M101.0
+(* Network 4 *)
+(*Pulsos para disminuir la frecuencia de la bomba*)
+LD    %M80.5
+ST   %M100.6
+(* Network 5 *)
+(*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------CONFIGURACIÓN PARA EL CANAL ANALÓGICO 0Corriente mínima del canal analógico 0 (mA)Recupero configuración si hubo un reset*)
+LD    %SM0.1
+MOVE    AI0_IMin, %VW78
+(* Network 6 *)
+(*CONFIGURACIÓN PARA EL CANAL ANALÓGICO 0Corriente mínima del canal analógico 0 (mA)Actualizo el dato introducido por el HMI*)
+LD    TRUE
+MOVE    %VW78, AI0_IMin
+(* Network 7 *)
+(*CONFIGURACIÓN PARA EL CANAL ANALÓGICO 0Corriente máxima del canal analógico 0 (mA)Recupero configuración si hubo un reset*)
+LD    %SM0.1
+MOVE    AI0_IMax, %VW80
+(* Network 8 *)
+(*CONFIGURACIÓN PARA EL CANAL ANALÓGICO 0Corriente máxima del canal analógico 0 (mA)Actualizo el dato introducido por el HMI*)
+LD    TRUE
+MOVE    %VW80, AI0_IMax
+(* Network 9 *)
+(*CONFIGURACIÓN PARA EL CANAL ANALÓGICO 0magnitud mínima del canal analógico 0Recupero configuración si hubo un reset*)
+LD    %SM0.1
+MOVE    AI0_MMin, %VR82
+(* Network 10 *)
+(*CONFIGURACIÓN PARA EL CANAL ANALÓGICO 0magnitud mínima del canal analógico 0Actualizo el dato introducido por el HMI*)
+LD    TRUE
+MOVE    %VR82, AI0_MMin
+(* Network 11 *)
+(*CONFIGURACIÓN PARA EL CANAL ANALÓGICO 0magnitud máxima del canal analógico 0Recupero configuración si hubo un reset*)
+LD    %SM0.1
+MOVE    AI0_MMax, %VR86
+(* Network 12 *)
+(*CONFIGURACIÓN PARA EL CANAL ANALÓGICO 0magnitud máxima del canal analógico 0Actualizo el dato introducido por el HMI*)
+LD    TRUE
+MOVE    %VR86, AI0_MMax
+(* Network 13 *)
+(*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------CONFIGURACIÓN PARA LA ENTRADA DIGITAL 0Ancho del pulso de la entrada digital 0*)
+LD    %SM0.1
+MOVE    DI0_Pton, %VW94
+(* Network 14 *)
+LD    TRUE
+MOVE    %VW94, DI0_Pton
+(* Network 15 *)
+(*CONFIGURACIÓN PARA LA ENTRADA DIGITAL 0Tiempo en OFF del pulso de la entrada digital 0*)
+LD    %SM0.1
+MOVE    DI0_Ptoff, %VW96
+(* Network 16 *)
+LD    TRUE
+MOVE    %VW96, DI0_Ptoff
+(* Network 17 *)
+(*CONFIGURACIÓN PARA LA ENTRADA DIGITAL 0Magpp usado para en sensor conectado a la entrada digital 0*)
+LD    %SM0.1
+MOVE    PC_Magpp, %VR98
+(* Network 18 *)
+LD    TRUE
+MOVE    %VR98, PC_Magpp

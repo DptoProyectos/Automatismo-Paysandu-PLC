@@ -1,0 +1,4 @@
+VAR_IN_OUT
+    HmiIn  AT  %L1.1 : BOOL ; (* Bit que se quiere leer del HMI y mantener actualizada con la del software *) 
+    SofOut  AT  %L1.2 : BOOL ; (* Bit del software que se quiere escribir segun los cambios del HMI *) 
+END_VAR

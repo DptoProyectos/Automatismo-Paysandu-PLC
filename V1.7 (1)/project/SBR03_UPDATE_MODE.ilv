@@ -1,0 +1,9 @@
+VAR_IN_OUT
+    HMI_M  AT  %LB32 : BYTE ; (* Estado de operación 0-> Emerencia 1-> Local 2-> Remoto *) 
+END_VAR
+VAR_OUTPUT
+    SOF_M  AT  %LB33 : BYTE ; (*  *) 
+END_VAR
+VAR
+    rstCount  AT  %L6.6 : BOOL ; (*  *) 
+END_VAR

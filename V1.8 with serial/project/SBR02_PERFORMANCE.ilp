@@ -1,0 +1,109 @@
+(*2*)
+(* Network 0 *)
+(*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------MODO EMERGENCIASi esta activo el modo de emergencia la salida de control está en cero, en cualquier otro caso esta en 1*)
+LD    TRUE
+EQ    MODE, B#0
+STN   %M100.0
+S    %M100.4
+(* Network 1 *)
+(*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------MODO LOCALSi se manda a prender la bomba por el HMI la prendo*)
+LD    TRUE
+EQ    MODE, B#1
+CAL    SBR13    PUMP_OnOff, CTR_PresMin, CTR_CauMin, OUT_Start, OUT_Valve, CTL_AlrPres, CTL_AlrCau, CTL_AlrFlow
+(* Network 2 *)
+(*MODO LOCALDetecto los pulsos de frecuencia del HMI y preparo el dato para mandarlo al generador de pulsos*)
+LD    TRUE
+EQ    MODE, B#1
+AND    %V3648.2
+CAL    SBR05    RHF_IncFrec, RHF_DecFrec, RHF_Des, HMI_FrecCount, RHF_CurrCount, RHF_Readed
+(* Network 3 *)
+(*MODO LOCALCondiciones para poder variar la frecuencia*)
+LD    %V3648.2
+AND    %M102.6
+ST   %M0.0
+(* Network 4 *)
+(*MODO LOCALDetecto cuando el usuario aprieta el boton de subir para incrementar la frecuencia*)
+LD    TRUE
+EQ    MODE, B#1
+AND    %M0.0
+AND    %M100.6
+ST   %M100.2
+(* Network 5 *)
+(*MODO LOCALDetecto cuando el usuario aprieta el boton de bajar para decrementar la frecuencia*)
+LD    TRUE
+EQ    MODE, B#1
+AND    %M0.0
+AND    %M101.0
+ST   %M100.3
+(* Network 6 *)
+(*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------MODO REMOTOSi se manda a prender la bomba por el MODBUS la prendo*)
+LD    TRUE
+EQ    MODE, B#2
+CAL    SBR13    M_DO_1, CTR_PresMin, CTR_CauMin, OUT_Start, OUT_Valve, CTL_AlrPres, CTL_AlrCau, CTL_AlrFlow
+(* Network 7 *)
+(*MODO REMOTOCondiciones para hacer que se mande a modificar la frecuencia de forma remota*)
+LD    %M102.6
+AND    %V3992.1
+AND    %V3648.1
+GE    M_FreqUpdate, -50
+LE    M_FreqUpdate, 50
+ST   %M0.3
+(* Network 8 *)
+(*MODO REMOTOSi se cumplen las condiciones anteriores mando el dato al generador de pulsos defrecuencia*)
+LD    TRUE
+EQ    MODE, B#2
+AND    %M0.3
+MOVE    M_FreqUpdate, FrecCount
+(* Network 9 *)
+(*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------GENERACION DE PULSOSCualquier modo que mande a generar pulsos los generamos*)
+LD    TRUE
+CAL    SBR04    500, 500, FrecCount, bool3, bool4, PG_Ready
+(* Network 10 *)
+(*GENERACION DE PULSOSReinicio el detector de pulsos del HMI así como el byte de actualización  de frecuencia mbus para que este disponible nuevamente*)
+LD    %V3648.1
+MOVE    0, M_FreqUpdate
+R    %M101.1
+(* Network 11 *)
+(*GENERACION DE PULSOSColoco los pulsos generados para aunmentar frecuencia en la salida solo si esto trabajando en modo remoto*)
+LD    TRUE
+EQ    MODE, B#2
+AND    %M0.3
+S    %M100.2
+(* Network 12 *)
+(*GENERACION DE PULSOSColoco los pulsos generados para aunmentar frecuencia en la salida solo si esto trabajando en modo remoto*)
+LD    TRUE
+EQ    MODE, B#2
+ANDN    %M0.3
+R    %M100.2
+(* Network 13 *)
+(*GENERACION DE PULSOSColoco los pulsos generados para reducir la frecuencia en la salida solo si esto trabajando en modo remoto*)
+LD    TRUE
+EQ    MODE, B#2
+AND    %M0.4
+S    %M100.3
+(* Network 14 *)
+(*GENERACION DE PULSOSColoco los pulsos generados para reducir la frecuencia en la salida solo si esto trabajando en modo remoto*)
+LD    TRUE
+EQ    MODE, B#2
+ANDN    %M0.4
+R    %M100.3
+(* Network 15 *)
+(*YCHSe manda a enviar los datos vía serial cada 15 segundos*)
+LD    TRUE
+AND(
+LDN    %M105.1
+TON   T50, 150
+__CR_EQ_1
+MOVE    T50, inttr
+__CR_RESTORE
+ALT    SerialToggle
+S_BLK    1, serialTxData
+OR(
+LD    %M105.1
+TON   T51, 1
+__CR_EQ_1
+MOVE    T51, inttr
+__CR_RESTORE
+ALT    SerialToggle
+)
+)

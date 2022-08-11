@@ -1,0 +1,88 @@
+(*2*)
+(* Network 0 *)
+(*YCHColoco estos valores de entrada y salida en memoria tipo V porque la memoria tipo L se encuentra agotada para nuevas implementacionesENTRADA- rdain3_IMIN -> rango mínimo de la señal de salida del sensor a conectar (0-20)- rdain3_IMAX -> rango máximo de la señal de salida del sensor a conectar (0-20)- rdain3_MMIN -> valor mínimos de la magnitud leida por el sensor- rdain3_MMAX -> valor máximo de la magnitud leída por el sensorSALIDA- rdain3_AO -> VALOR DE LA MAGNITUD LEIDA POR EL SENSOR CONECTADO AL CANAL ANALÓGICO DE ENTRADA*)
+LD    TRUE
+AND(
+LD    TRUE
+MOVE    AI3_IMin, rdain3_IMIN
+MOVE    AI3_IMax, rdain3_IMAX
+MOVE    AI3_MMin, rdain3_MMIN
+MOVE    AI3_MMax, rdain3_MMAX
+OR(
+LD    TRUE
+MOVE    rdain3_AO, VAR_CURR
+)
+)
+(* Network 1 *)
+(*multiplicación de I_MIN * 1000*)
+LD    %SM0.0
+MOVE    rdain3_IMIN, int0
+MUL    1000, int0
+(* Network 2 *)
+(*multiplicación de I_MAX * 1000*)
+LD    %SM0.0
+MOVE    rdain3_IMAX, int1
+MUL    1000, int1
+(* Network 3 *)
+(*escalado de la señal de entrada*)
+LD    %SM0.0
+LINCO    int0, int1, rdain3_MMIN, rdain3_MMAX, 1.0, %AIW14, dinttr, rdain3_AO
+(* Network 4 *)
+(*CASO EN QUE MMAX > MMINalarma por sensor con valor muy bajo*)
+LD    TRUE
+AND(
+LD    TRUE
+GT    rdain3_MMAX, rdain3_MMIN
+LT    rdain3_AO, rdain3_MMIN
+MOVE    1.0, rdain3_AO
+MUL    rdain3_MMIN, rdain3_AO
+OR(
+LD    TRUE
+GT    rdain3_MMIN, rdain3_MMAX
+GT    rdain3_AO, rdain3_MMIN
+MOVE    1.0, rdain3_AO
+MUL    rdain3_MMIN, rdain3_AO
+)
+)
+ST   alrmLow
+(* Network 5 *)
+(*CASO EN QUE MMAX > MMINalarma por sensor con valor muy alto*)
+LD    TRUE
+AND(
+LD    TRUE
+GT    rdain3_MMAX, rdain3_MMIN
+GT    rdain3_AO, rdain3_MMAX
+MOVE    1.0, rdain3_AO
+MUL    rdain3_MMAX, rdain3_AO
+OR(
+LD    TRUE
+GT    rdain3_MMIN, rdain3_MMAX
+LT    rdain3_AO, rdain3_MMAX
+MOVE    1.0, rdain3_AO
+MUL    rdain3_MMAX, rdain3_AO
+)
+)
+ST   alrmHig
+(* Network 6 *)
+(*activación de alarma cuando pasen 5 segundos calor fuera de rango*)
+LD    LOW
+OR    HIG
+TON   T49, 500
+ST   ALAR
+(* Network 7 *)
+(*activación de alarma cuando pasen 5 segundos calor fuera de rango*)
+LD    alrmLow
+OR    alrmHig
+TON   T16, 500
+ST   ALAR
+ST   alr
+(* Network 8 *)
+(*Decirmos que la alarma es por underload*)
+LD    alr
+AND    alrmLow
+ST   LOW
+(* Network 9 *)
+(*Decirmos que la alarma es por overload*)
+LD    alr
+AND    alrmHig
+ST   HIG

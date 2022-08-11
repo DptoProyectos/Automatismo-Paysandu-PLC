@@ -1,0 +1,109 @@
+(*2*)
+(* Network 0 *)
+(*CONTEO DE PULSOS*)
+LD    TRUE
+AND    CH
+AND(
+LD    TRUE
+MOVE    PTON, int0
+DIV    10, int0
+OR(
+LD    TRUE
+MOVE    PTOFF, int1
+DIV    10, int1
+)
+)
+TON   T5, int0
+__CR_EQ_1
+MOVE    T5, int0
+__CR_RESTORE
+TP   T6, int1
+__CR_EQ_1
+MOVE    T6, int1
+__CR_RESTORE
+CTU   C1, RST, 1
+__CR_EQ_1
+MOVE    C1, COUNT
+__CR_RESTORE
+ST   %BR0.0
+(* Network 1 *)
+(*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------CALCULO DEL TIEMPO ENTRE PUSOSINITIAL CONDITIONS*)
+LD    %SM0.1
+MOVE    0, state
+(* Network 2 *)
+(*STATE 0*)
+LD    TRUE
+EQ    state, 0
+MOVE    DI#32767, TPULSE
+AND    CH
+R_TRIG
+MOVE    1, state
+(* Network 3 *)
+(*STATE 1*)
+LD    TRUE
+EQ    state, 1
+AND(
+LD    TRUE
+TON   T1, 32767
+__CR_EQ_1
+MOVE    T1, C_timeOn
+__CR_RESTORE
+MOVE    0, state
+OR(
+LD    CH
+F_TRIG
+MOVE    2, state
+)
+)
+(* Network 4 *)
+(*STATE 2*)
+LD    TRUE
+EQ    state, 2
+MOVE    C_timeOn, timeON
+MOVE    3, state
+(* Network 5 *)
+(*STATE 2*)
+LD    TRUE
+EQ    state, 3
+AND(
+LD    TRUE
+TON   T2, 32767
+__CR_EQ_1
+MOVE    T2, C_timeOf
+__CR_RESTORE
+MOVE    0, state
+OR(
+LD    CH
+F_TRIG
+MOVE    4, state
+)
+)
+(* Network 6 *)
+(*STATE 3*)
+LD    TRUE
+EQ    state, 4
+MOVE    C_timeOf, timeOFF
+AND(
+LD    TRUE
+I_TO_DI    timeON, dint0
+OR(
+LD    TRUE
+I_TO_DI    timeOFF, dint1
+)
+)
+MOVE    dint0, dint3
+ADD    dint1, dint3
+AND(
+LD    TRUE
+MOVE    dint3, TPULSE
+OR(
+LD    TRUE
+GE    dint3, DI#32767
+MOVE    dint3, TPULSE
+)
+)
+MOVE    1, state
+(* Network 7 *)
+(*REINICIO DEL CONTADOR*)
+LD    TRUE
+STN   RST

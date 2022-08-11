@@ -1,0 +1,34 @@
+(*2*)
+(* Network 0 *)
+(*------------------------------------------------------------------------------------------------------------------SALIDAS DIGITALES A TRANSISTORCONTROL (0 -> Modo de Emergencia | 1 -> Modos Local y Remoto)*)
+LD    %M100.0
+ST   %Q0.0
+(* Network 1 *)
+(*SALIDAS DIGITALES A TRANSISTORSTART (0 -> Prender bomba | 1 -> Apagar bomba)*)
+LD    %M100.1
+ST   %Q0.1
+(* Network 2 *)
+(*SALIDAS DIGITALES A TRANSISTORUP_FREC (Trenes de pulsos para que el variador aumente la frecuencia)*)
+LD    %M100.3
+ST   %Q0.2
+(* Network 3 *)
+(*SALIDAS DIGITALES A TRANSISTORDOWN_FREC (Trenes de pulsos para que el variador disminuya la frecuencia)*)
+LD    %M100.2
+ST   %Q0.3
+(* Network 4 *)
+(*SALIDAS DIGITALES A TRANSISTORVALVE (0 -> Válvula abierta | 1 -> Válvula cerrada)*)
+LD    %M100.4
+ST   %Q0.4
+(* Network 5 *)
+(*------------------------------------------------------------------------------------------------------------------RGISTROS MODBUSEnvío el modo actual de trabajo*)
+LD    TRUE
+B_TO_I    MODE, int0
+MOVE    int0, M_Mode
+(* Network 6 *)
+(*Escribo presión de sellos*)
+LD    TRUE
+MOVE    PRESION, M_PresionSellos
+(* Network 7 *)
+(*Escribo caudal de sellos*)
+LD    TRUE
+MOVE    CAUDAL_SELLOS, M_CaudalSellos

@@ -1,0 +1,23 @@
+(*2*)
+(* Network 0 *)
+(*REGISTRO MODBUS ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SEÑAL DE LA BOMBA ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------Lectura de la señal de prender o apagar la bomba100 -> APAGAR101 -> PRENDER*)
+LD    TRUE
+EQ    mReg2096, 100
+R    %M104.3
+(* Network 1 *)
+(*Lectura de la señal de prender o apagar la bomba100 -> APAGAR101 -> PRENDER*)
+LD    TRUE
+EQ    mReg2096, 101
+S    %M104.3
+(* Network 2 *)
+(*REGISTRO MODBUSSEÑAL DE ACTUALIZACION DE MODO  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------100 -> HMI y web sincronizados101 -> hmi pide cambio a modo emergencia a la web102 -> hmi pide cambio a modo remotor a la web103 -> hmi pide cambio a modo local a la web105 -> web pide cambio a modo emergencia al hmi106 -> web pide cambio a modo remoto al hmi107 -> web pide cambio a modo local al hmi*)
+LD    TRUE
+MOVE    mReg2097, ModeUpdate
+SUB    100, ModeUpdate
+(* Network 3 *)
+(*REGISTRO MODBUSPULSOS DE FRECUENCIA  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------Señal que indica los pulsos de frecuencia que se deben actualizar*)
+LD    TRUE
+GE    mReg2098, 50
+LE    mReg2098, 150
+MOVE    mReg2098, M_FreqUpdate
+SUB    100, M_FreqUpdate

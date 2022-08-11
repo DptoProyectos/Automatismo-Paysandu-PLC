@@ -1,0 +1,137 @@
+(*2*)
+(* Network 0 *)
+(*CONVERSIÓN DEBIDO A QUE LOS TIMERS TIENEN RESOLUCIÓN DE 10 MS*)
+LD    TRUE
+AND(
+LD    TRUE
+MOVE    PTON, pTonMs
+DIV    10, pTonMs
+OR(
+LD    TRUE
+MOVE    PTOFF, pToffMs
+DIV    10, pToffMs
+)
+)
+(* Network 1 *)
+(*CONDICION INICIAL*)
+LD    %SM0.1
+AND(
+LD    TRUE
+MOVE    0, pulseSt
+OR(
+LD    TRUE
+MOVE    DI#32767, TPULSE
+)
+)
+(* Network 2 *)
+(*STATE_0*)
+LD    TRUE
+EQ    pulseSt, 0
+AND    CH
+R_TRIG
+MOVE    1, pulseSt
+(* Network 3 *)
+(*STATE_1*)
+LD    TRUE
+EQ    pulseSt, 1
+AND(
+LD    TRUE
+TON   T10, 32767
+__CR_EQ_1
+MOVE    T10, cTimeOn
+__CR_RESTORE
+MOVE    DI#32767, TPULSE
+OR(
+LD    CH
+F_TRIG
+AND(
+LD    TRUE
+GE    cTimeOn, pTonMs
+AND(
+LD    TRUE
+MOVE    2, pulseSt
+OR(
+LD    TRUE
+MOVE    cTimeOn, timeOn
+)
+)
+OR(
+LD    TRUE
+LT    cTimeOn, pTonMs
+MOVE    0, pulseSt
+)
+)
+)
+)
+(* Network 4 *)
+(*STATE_2*)
+LD    TRUE
+EQ    pulseSt, 2
+AND(
+LD    TRUE
+TON   T11, 32767
+__CR_EQ_1
+MOVE    T11, cTimeOf
+__CR_RESTORE
+MOVE    DI#32767, TPULSE
+OR(
+LD    CH
+R_TRIG
+AND(
+LD    TRUE
+GE    cTimeOf, pToffMs
+AND(
+LD    TRUE
+MOVE    3, pulseSt
+OR(
+LD    TRUE
+MOVE    cTimeOf, timeOff
+)
+)
+OR(
+LD    TRUE
+LT    cTimeOf, pToffMs
+MOVE    1, pulseSt
+)
+)
+)
+)
+(* Network 5 *)
+LD    TRUE
+NE    pulseSt, 3
+TON   T12, 3276
+__CR_EQ_1
+MOVE    T12, int3
+__CR_RESTORE
+MOVE    DI#32767, TPULSE
+(* Network 6 *)
+(*STATE_3*)
+LD    TRUE
+EQ    pulseSt, 3
+AND(
+LD    TRUE
+MOVE    1, pulseSt
+OR(
+LDN    RST
+INC    softCoun
+MOVE    softCoun, COUNT
+)
+OR(
+LD    TRUE
+AND(
+LD    TRUE
+I_TO_DI    timeOn, dint0
+OR(
+LD    TRUE
+I_TO_DI    timeOff, dint1
+)
+)
+ADD    dint0, dint1
+MOVE    dint1, TPULSE
+MUL    DI#10, TPULSE
+)
+)
+(* Network 7 *)
+LD    RST
+MOVE    0, softCoun
+MOVE    softCoun, COUNT

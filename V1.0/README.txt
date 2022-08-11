@@ -1,0 +1,1 @@
+Proyecto ya con las variables necesarias para usar en los módulos

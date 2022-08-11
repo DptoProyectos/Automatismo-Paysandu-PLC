@@ -1,0 +1,65 @@
+(*2*)
+(* Network 0 *)
+(*STATE_0*)
+LD    TRUE
+EQ    FREC_State, B#0
+NE    PUL_CNT, B#0
+AND(
+LD    TRUE
+LT    FREC_Count, PUL_CNT
+MOVE    B#1, FREC_State
+OR(
+LD    TRUE
+GE    FREC_Count, PUL_CNT
+MOVE    B#5, FREC_State
+)
+)
+(* Network 1 *)
+(*STATE_1*)
+LD    TRUE
+EQ    FREC_State, B#1
+MOVE    B#2, FREC_State
+S    PULSES
+R    READY
+(* Network 2 *)
+(*STATE_2*)
+LD    TRUE
+EQ    FREC_State, B#2
+TON   T1, T_ON
+__CR_EQ_1
+MOVE    T1, int1
+__CR_RESTORE
+MOVE    B#3, FREC_State
+(* Network 3 *)
+(*STATE_3*)
+LD    TRUE
+EQ    FREC_State, B#3
+INC    FREC_Count
+MOVE    B#4, FREC_State
+R    PULSES
+(* Network 4 *)
+(*STATE_4*)
+LD    TRUE
+EQ    FREC_State, B#4
+TON   T2, T_OFF
+__CR_EQ_1
+MOVE    T2, int1
+__CR_RESTORE
+MOVE    B#0, FREC_State
+(* Network 5 *)
+(*STATE_5*)
+LD    TRUE
+EQ    FREC_State, B#5
+AND(
+LD    TRUE
+MOVE    B#0, FREC_Count
+OR(
+LD    TRUE
+MOVE    B#0, PUL_CNT
+)
+OR(
+LD    TRUE
+MOVE    B#0, FREC_State
+)
+)
+S    READY
