@@ -51,8 +51,10 @@ R    pump
 LDN    start
 R    pump
 (* Network 7 *)
-(*PROCESESO DE PARADA DE LA BOMBACuando se manda a apagar la bomba espero 10 segundos antes de cerrar la electroválvula*)
-LDN    start
+(*PROCESESO DE PARADA DE LA BOMBACuando se apaga la bomba espero 10 segundos antes de cerrar la electroválvula*)
+LDN    %M102.6
+ANDN    pump
+ANDN    start
 TON   T6, 1000
 __CR_EQ_1
 MOVE    T6, int0
