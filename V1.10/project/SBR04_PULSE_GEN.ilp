@@ -1,0 +1,89 @@
+(*2*)
+(* Network 0 *)
+(*YCHCondicion inicial*)
+LD    %SM0.1
+S    READY
+(* Network 1 *)
+LD    TRUE
+ABS    PUL_GEN, int1
+I_TO_B    int1, PUL_CNT
+(* Network 2 *)
+(*STATE_0*)
+LD    TRUE
+EQ    FREC_State, B#0
+NE    PUL_CNT, B#0
+AND(
+LD    TRUE
+LT    FREC_Count, PUL_CNT
+MOVE    B#1, FREC_State
+OR(
+LD    TRUE
+GE    FREC_Count, PUL_CNT
+MOVE    B#5, FREC_State
+)
+)
+(* Network 3 *)
+(*STATE_1*)
+LD    TRUE
+EQ    FREC_State, B#1
+MOVE    B#2, FREC_State
+S    PULSES
+R    READY
+(* Network 4 *)
+(*STATE_2*)
+LD    TRUE
+EQ    FREC_State, B#2
+MOVE    T_ON, int0
+DIV    100, int0
+TON   T20, int0
+__CR_EQ_1
+MOVE    T20, int1
+__CR_RESTORE
+MOVE    B#3, FREC_State
+(* Network 5 *)
+(*STATE_3*)
+LD    TRUE
+EQ    FREC_State, B#3
+INC    FREC_Count
+MOVE    B#4, FREC_State
+R    PULSES
+(* Network 6 *)
+(*STATE_4*)
+LD    TRUE
+EQ    FREC_State, B#4
+MOVE    T_OFF, int0
+DIV    100, int0
+TON   T21, int0
+__CR_EQ_1
+MOVE    T21, int1
+__CR_RESTORE
+MOVE    B#0, FREC_State
+(* Network 7 *)
+(*STATE_5*)
+LD    TRUE
+EQ    FREC_State, B#5
+AND(
+LD    TRUE
+MOVE    B#0, FREC_Count
+OR(
+LD    TRUE
+MOVE    0, PUL_GEN
+)
+OR(
+LD    TRUE
+MOVE    B#0, FREC_State
+)
+)
+S    READY
+(* Network 8 *)
+(*GENERACION DE PULSOSSelecciono que salida activar en base a pulsos para aumentar o disminuir la frecuencia*)
+LD    TRUE
+GE    PUL_GEN, 0
+AND    PULSES
+ST   P_UP
+(* Network 9 *)
+(*GENERACION DE PULSOSSelecciono que salida activar en base a pulsos para aumentar o disminuir la frecuencia*)
+LD    TRUE
+LT    PUL_GEN, 0
+AND    PULSES
+ST   P_DOWN

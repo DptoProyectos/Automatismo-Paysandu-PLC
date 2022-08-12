@@ -1,0 +1,10 @@
+VAR_OUTPUT
+    ALAR  AT  %L4.1 : BOOL ; (* alarma {0=>sensor OK | 1=> sensor FAIL}: Se activa cuando pasan 5 segundos con los valores por debajo de MMIN o arriba de MMAX *) 
+    LOW  AT  %L4.2 : BOOL ; (* estado de alarma {1=> sensor underflow }: Indica que se activo la alarma porque la medicion no alcanza MMIN *) 
+    HIG  AT  %L4.3 : BOOL ; (* estado de alarma {1=> sensor overflow }: Indica que se activo la alarma porque la medicion del senso superó MMAX *) 
+END_VAR
+VAR
+    alrmHig  AT  %L6.0 : BOOL ; (*  *) 
+    alrmLow  AT  %L7.7 : BOOL ; (*  *) 
+    alr  AT  %L6.2 : BOOL ; (*  *) 
+END_VAR

@@ -1,0 +1,82 @@
+(*2*)
+(* Network 0 *)
+(*YCHColoco estos valores de entrada y salida en memoria tipo V porque la memoria tipo L se encuentra agotada para nuevas implementacionesENTRADA- rdain1_IMIN -> rango mínimo de la señal de salida del sensor a conectar (0-20)- rdain1_IMAX -> rango máximo de la señal de salida del sensor a conectar (0-20)- rdain1_MMIN -> valor mínimos de la magnitud leida por el sensor- rdain1_MMAX -> valor máximo de la magnitud leída por el sensorSALIDA- rdain1_AO -> VALOR DE LA MAGNITUD LEIDA POR EL SENSOR CONECTADO AL CANAL ANALÓGICO DE ENTRADA*)
+LD    TRUE
+AND(
+LD    TRUE
+MOVE    AI1_IMin, rdain1_IMIN
+MOVE    AI1_IMax, rdain1_IMAX
+MOVE    AI1_MMin, rdain1_MMIN
+MOVE    AI1_MMax, rdain1_MMAX
+OR(
+LD    TRUE
+MOVE    rdain1_AO, H_CAMARA
+)
+)
+(* Network 1 *)
+(*multiplicación de I_MIN * 1000*)
+LD    %SM0.0
+MOVE    rdain1_IMIN, int0
+MUL    1000, int0
+(* Network 2 *)
+(*multiplicación de I_MAX * 1000*)
+LD    %SM0.0
+MOVE    rdain1_IMAX, int1
+MUL    1000, int1
+(* Network 3 *)
+(*escalado de la señal de entrada*)
+LD    %SM0.0
+LINCO    int0, int1, rdain1_MMIN, rdain1_MMAX, 1.0, %AIW4, dinttr, rdain1_AO
+(* Network 4 *)
+(*CASO EN QUE MMAX > MMINalarma por sensor con valor muy bajo*)
+LD    TRUE
+AND(
+LD    TRUE
+GT    rdain1_MMAX, rdain1_MMIN
+LT    rdain1_AO, rdain1_MMIN
+MOVE    1.0, rdain1_AO
+MUL    rdain1_MMIN, rdain1_AO
+OR(
+LD    TRUE
+GT    rdain1_MMIN, rdain1_MMAX
+GT    rdain1_AO, rdain1_MMIN
+MOVE    1.0, rdain1_AO
+MUL    rdain1_MMIN, rdain1_AO
+)
+)
+ST   alrmLow
+(* Network 5 *)
+(*CASO EN QUE MMAX > MMINalarma por sensor con valor muy alto*)
+LD    TRUE
+AND(
+LD    TRUE
+GT    rdain1_MMAX, rdain1_MMIN
+GT    rdain1_AO, rdain1_MMAX
+MOVE    1.0, rdain1_AO
+MUL    rdain1_MMAX, rdain1_AO
+OR(
+LD    TRUE
+GT    rdain1_MMIN, rdain1_MMAX
+LT    rdain1_AO, rdain1_MMAX
+MOVE    1.0, rdain1_AO
+MUL    rdain1_MMAX, rdain1_AO
+)
+)
+ST   alrmHig
+(* Network 6 *)
+(*activación de alarma cuando pasen 5 segundos calor fuera de rango*)
+LD    alrmLow
+OR    alrmHig
+TON   T8, 500
+ST   ALAR
+ST   alr
+(* Network 7 *)
+(*Decirmos que la alarma es por underload*)
+LD    alr
+AND    alrmLow
+ST   LOW
+(* Network 8 *)
+(*Decirmos que la alarma es por overload*)
+LD    alr
+AND    alrmHig
+ST   HIG

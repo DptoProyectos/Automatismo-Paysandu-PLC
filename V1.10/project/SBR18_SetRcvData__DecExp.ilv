@@ -1,0 +1,6 @@
+VAR_INPUT
+    ExIN  AT  %LD48 : REAL ; (*  *) 
+END_VAR
+VAR_OUTPUT
+    ExOut  AT  %LD56 : REAL ; (*  *) 
+END_VAR
