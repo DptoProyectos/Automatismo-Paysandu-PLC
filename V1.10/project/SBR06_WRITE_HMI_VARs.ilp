@@ -141,14 +141,9 @@ LD    %M104.2
 ST   %M90.6
 (* Network 32 *)
 (*YCHBit que se activa por cualquier alarma que este activa*)
-LD    %M102.6
-OR    %M102.0
+LD    %M102.0
 OR    %M102.1
-OR    %M102.2
 OR    %M104.0
 OR    %M101.2
 OR    %M102.3
-OR    %M102.7
-OR    %M103.2
-OR    %M103.5
 ST   %M105.4

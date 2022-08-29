@@ -1,6 +1,6 @@
 (*2*)
 (* Network 0 *)
-(*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------CANALES ANALÓGICOSLECTURA DEL VALOR DE PRESION*)
+(*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------CANALES ANALÓGICOSLECTURA DEL VALOR DE PRESIONOJO. El tablero de la bomba uno lee de AIW6 debido que AIW0 y AIW2 estan roto El tablero de la bomba dos lee de AIW0 debido que AIW2 esta roto*)
 LD    TRUE
 CAL    SBR08    AI0_Alr, AI0_AlrHig, AI0_AlrLow
 (* Network 1 *)

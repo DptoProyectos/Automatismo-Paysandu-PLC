@@ -63,7 +63,7 @@ ST   %V3982.2
 LD    %M102.1
 ST   %V3982.3
 (* Network 15 *)
-(*Alarma de flujo*)
+(*YCHAlarma de flujo.*)
 LD    %M102.2
 ST   %V3982.4
 (* Network 16 *)
